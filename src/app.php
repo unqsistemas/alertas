@@ -6,6 +6,7 @@ use Silex\Provider\RoutingServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\HttpFragmentServiceProvider;
+use Silex\Provider\DoctrineServiceProvider;
 
 $app = new Application();
 $app->register(new RoutingServiceProvider());
@@ -22,5 +23,27 @@ $app['twig'] = $app->extend('twig', function ($twig, $app) {
 
     return $twig;
 });
+
+$app->register(new DoctrineServiceProvider(), array(
+    'db.options' => array(
+        'driver'        => 'pdo_mysql',
+        'host'          => 'localhost',
+        'dbname'        => 'alertas',
+        'user'          => 'root',
+        'password'      => 'root',
+    )
+));
+
+$app->register(new Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
+    "orm.em.options" => array(
+        "mappings" => array(
+            array(
+                "type" => "annotation",
+                "namespace" => "Entity",
+                "path" => __DIR__."/Entity"
+            )
+        )
+    )
+));
 
 return $app;
