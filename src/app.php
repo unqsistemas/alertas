@@ -24,6 +24,7 @@ $app->register(new DoctrineServiceProvider(), array(
 ));
 
 $app->register(new Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
+    "orm.proxies_dir" => __DIR__.'/../var/cache/doctrine/',
     "orm.em.options" => array(
         "mappings" => array(
             array(

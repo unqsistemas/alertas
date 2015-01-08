@@ -13,7 +13,7 @@ class Usuario
     /**
      * @Column(type="integer")
      * @Id
-     * @GeneratedValue(strategy="AUTO")
+     * @GeneratedValue
      */
     protected $id;
 

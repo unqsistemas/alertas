@@ -4,6 +4,8 @@ namespace Alerta;
 
 use Silex\Application;
 use Entity\Alerta;
+use Entity\Usuario;
+use Entity\AlertaAsignada;
 
 class AlertaManager
 {
@@ -14,14 +16,41 @@ class AlertaManager
         $this->app = $app;
     }
 
+    protected function getUsuario($username)
+    {
+        $em = $this->app['orm.em'];
+        $usuario = $em->getRepository('Entity\Usuario')->findOneByUsername($username);
+
+        if (!$usuario) {
+            $usuario = new Usuario();
+            $usuario->setUsername($username);
+        }
+
+        return $usuario;
+    }
+
     public function crear($mensaje, $username)
     {
         $em = $this->app['orm.em'];
 
+        $usuario = $this->getUsuario($username);
+
         $alerta = new Alerta();
         $alerta->setMensaje($mensaje);
+        $alertaAsignada = new AlertaAsignada($alerta, $usuario);
 
         $em->persist($alerta);
+        $em->persist($usuario);
         $em->flush();
+        $em->persist($alertaAsignada);
+        $em->flush();
+    }
+
+    public function getByUsuario($username)
+    {
+        $em = $this->app['orm.em'];
+        $usuario = $this->getUsuario($username);
+
+        return $em->getRepository('Entity\AlertaAsignada')->findByUsuario($usuario);
     }
 }

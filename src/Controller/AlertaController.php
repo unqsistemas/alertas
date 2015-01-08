@@ -11,15 +11,15 @@ class AlertaController implements ControllerProviderInterface
     {
         $controllers = $app['controllers_factory'];
 
-        $controllers->get('/', [$this, 'alertas']);
+        $controllers->get('/{username}', [$this, 'alertas']);
 
         return $controllers;
     }
 
-    public function alertas(Application $app)
+    public function alertas(Application $app, $username)
     {
-        $em = $app['orm.em'];
-        $data = $em->getRepository('Entity\Alerta')->findAll();
+        $manager = $app['alerta_manager'];
+        $data = $manager->getByUsuario($username);
 
         return $app->json(array_map(function($alert) { return $alert->toArray(); }, $data));
     }

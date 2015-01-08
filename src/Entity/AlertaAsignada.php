@@ -25,7 +25,13 @@ class AlertaAsignada
     /**
      * @Column(type="boolean")
      */
-    protected $visto;
+    protected $visto = false;
+
+    public function __construct($alerta, $usuario)
+    {
+        $this->alerta = $alerta;
+        $this->usuario = $usuario;
+    }
 
     /**
      * Set visto
@@ -94,5 +100,14 @@ class AlertaAsignada
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->alerta->getId(),
+            'usuario' => $this->usuario->getUsername(),
+            'mensaje' => $this->alerta->getMensaje()
+        ];
     }
 }
