@@ -21,6 +21,6 @@ class AlertaController implements ControllerProviderInterface
         $em = $app['orm.em'];
         $data = $em->getRepository('Entity\Alerta')->findAll();
 
-        return $app->json($data);
+        return $app->json(array_map(function($alert) { return $alert->toArray(); }, $data));
     }
 }
