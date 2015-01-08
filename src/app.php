@@ -46,4 +46,8 @@ $app->register(new Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider, arra
     )
 ));
 
+$app['alerta_manager'] = function ($app) {
+    return new Alerta\AlertaManager($app);
+};
+
 return $app;

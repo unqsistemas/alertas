@@ -9,16 +9,6 @@ use Symfony\Component\Console\Input\InputOption;
 $console = new Application('My Silex Application', 'n/a');
 $console->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'dev'));
 $console->setDispatcher($app['dispatcher']);
-$console
-    ->register('my-command')
-    ->setDefinition(array(
-        // new InputOption('some-option', null, InputOption::VALUE_NONE, 'Some help'),
-    ))
-    ->setDescription('My command description')
-    ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
-        // do something
-    })
-;
 
 $console->setHelperSet(new Symfony\Component\Console\Helper\HelperSet(array(
     'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($app["db"]),
@@ -43,6 +33,10 @@ $console->addCommands(array(
     new \Doctrine\DBAL\Tools\Console\Command\ImportCommand,
     new \Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand,
     new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand
+));
+
+$console->addCommands(array(
+    new Command\CrearAlertaCommand($app['alerta_manager'])
 ));
 
 return $console;
