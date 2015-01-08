@@ -23,7 +23,7 @@ class Alerta
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -46,10 +46,15 @@ class Alerta
     /**
      * Get mensaje
      *
-     * @return string 
+     * @return string
      */
     public function getMensaje()
     {
         return $this->mensaje;
+    }
+
+    public function toArray()
+    {
+        return ['id' => $this->id, 'mensaje' => $this->mensaje];
     }
 }
