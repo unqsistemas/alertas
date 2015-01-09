@@ -32,18 +32,17 @@ class AlertaManager
     public function crear($mensaje, $username)
     {
         $em = $this->app['orm.em'];
-
         $usuario = $this->getUsuario($username);
-
         $alerta = new Alerta();
         $alerta->setMensaje($mensaje);
-        $alertaAsignada = new AlertaAsignada($alerta, $usuario);
 
-        $em->persist($alerta);
-        $em->persist($usuario);
-        $em->flush();
-        $em->persist($alertaAsignada);
-        $em->flush();
+        $em->transactional(function ($em) use ($alerta, $usuario) {
+            $em->persist($alerta);
+            $em->persist($usuario);
+            $em->flush();
+            $em->persist(new AlertaAsignada($alerta, $usuario));
+            $em->flush();
+        });
     }
 
     public function getByUsuario($username)
