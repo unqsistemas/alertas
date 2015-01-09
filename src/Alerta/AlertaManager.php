@@ -10,16 +10,17 @@ use Entity\AlertaAsignada;
 class AlertaManager
 {
     protected $app;
+    protected $em;
 
     public function __construct(Application $app)
     {
         $this->app = $app;
+        $this->em = $app['orm.em'];
     }
 
     protected function getUsuario($username)
     {
-        $em = $this->app['orm.em'];
-        $usuario = $em->getRepository('Entity\Usuario')->findOneByUsername($username);
+        $usuario = $this->em->getRepository('Entity\Usuario')->findOneByUsername($username);
 
         if (!$usuario) {
             $usuario = new Usuario();
@@ -31,12 +32,11 @@ class AlertaManager
 
     public function crear($mensaje, $username)
     {
-        $em = $this->app['orm.em'];
         $usuario = $this->getUsuario($username);
         $alerta = new Alerta();
         $alerta->setMensaje($mensaje);
 
-        $em->transactional(function ($em) use ($alerta, $usuario) {
+        $this->em->transactional(function ($em) use ($alerta, $usuario) {
             $em->persist($alerta);
             $em->persist($usuario);
             $em->flush();
@@ -45,12 +45,32 @@ class AlertaManager
         });
     }
 
-    public function getByUsuario($username)
+    public function marcarVisto($alertasAsignadas)
     {
-        $em = $this->app['orm.em'];
-        $usuario = $this->getUsuario($username);
-        $alertas = $em->getRepository('Entity\AlertaAsignada')->findByUsuario($usuario);
+        if (!is_array($alertasAsignadas)) {
+            $alertasAsignadas = array($alertasAsignadas);
+        }
 
-        return array_map(function($alert) { return $alert->toArray(); }, $alertas);
+        foreach ($alertasAsignadas as $alerta) {
+            $alerta->setVisto(true);
+            $this->em->persist($alerta);
+        }
+        $this->em->flush();
+    }
+
+    public function getByUsuario($username, $alertaIds = array())
+    {
+        $usuario = $this->getUsuario($username);
+        $find = ['usuario' => $usuario];
+        if ($alertaIds) {
+            $find['alerta'] = $alertaIds;
+        }
+
+        return $this->em->getRepository('Entity\AlertaAsignada')->findBy($find);
+    }
+
+    public function toArray($alertasAsignadas)
+    {
+        return array_map(function($alert) { return $alert->toArray(); }, $alertasAsignadas);
     }
 }

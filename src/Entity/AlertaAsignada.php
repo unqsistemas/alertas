@@ -107,7 +107,8 @@ class AlertaAsignada
         return [
             'id' => $this->alerta->getId(),
             'usuario' => $this->usuario->getUsername(),
-            'mensaje' => $this->alerta->getMensaje()
+            'mensaje' => $this->alerta->getMensaje(),
+            'visto' => $this->visto
         ];
     }
 }
