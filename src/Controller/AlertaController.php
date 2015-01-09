@@ -19,8 +19,7 @@ class AlertaController implements ControllerProviderInterface
     public function alertas(Application $app, $username)
     {
         $manager = $app['alerta_manager'];
-        $data = $manager->getByUsuario($username);
 
-        return $app->json(array_map(function($alert) { return $alert->toArray(); }, $data));
+        return $app->json($manager->getByUsuario($username));
     }
 }

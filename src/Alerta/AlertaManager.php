@@ -49,7 +49,8 @@ class AlertaManager
     {
         $em = $this->app['orm.em'];
         $usuario = $this->getUsuario($username);
+        $alertas = $em->getRepository('Entity\AlertaAsignada')->findByUsuario($usuario);
 
-        return $em->getRepository('Entity\AlertaAsignada')->findByUsuario($usuario);
+        return array_map(function($alert) { return $alert->toArray(); }, $alertas);
     }
 }
