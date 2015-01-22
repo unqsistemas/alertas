@@ -12,8 +12,8 @@ class AlertaController implements ControllerProviderInterface
     {
         $controllers = $app['controllers_factory'];
 
-        $controllers->put('/{alerta}/{username}', [$this, 'visto']);
-        $controllers->get('/{username}', [$this, 'alertas']);
+        $controllers->put('/alertas/{alerta}/visto/{username}', [$this, 'visto']);
+        $controllers->get('/usuarios/{username}/alertas', [$this, 'alertas']);
 
         return $controllers;
     }
