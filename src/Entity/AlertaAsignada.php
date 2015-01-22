@@ -23,23 +23,29 @@ class AlertaAsignada
     protected $usuario;
 
     /**
-     * @Column(type="boolean")
+     * @Column(type="datetime", nullable=true)
      */
-    protected $visto = false;
+    protected $visto;
+
+    /**
+     * @Column(type="datetime")
+     */
+    protected $fecha;
 
     public function __construct($alerta, $usuario)
     {
         $this->alerta = $alerta;
         $this->usuario = $usuario;
+        $this->fecha = new \DateTime();
     }
 
     /**
      * Set visto
      *
-     * @param boolean $visto
+     * @param \DateTime $visto
      * @return AlertaUsuario
      */
-    public function setVisto($visto)
+    public function setVisto(\DateTime $visto)
     {
         $this->visto = $visto;
 
@@ -49,7 +55,7 @@ class AlertaAsignada
     /**
      * Get visto
      *
-     * @return boolean
+     * @return \DateTime
      */
     public function getVisto()
     {
@@ -102,13 +108,37 @@ class AlertaAsignada
         return $this->usuario;
     }
 
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     * @return AlertaUsuario
+     */
+    public function setFecha(\DateTime $fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
     public function toArray()
     {
         return [
             'id' => $this->alerta->getId(),
             'usuario' => $this->usuario->getUsername(),
             'mensaje' => $this->alerta->getMensaje(),
-            'visto' => $this->visto
+            'visto' => $this->visto ? $this->visto->format("d-m-Y H:i:s") : $this->visto,
+            'fecha' => $this->fecha->format("d-m-Y H:i:s")
         ];
     }
 }

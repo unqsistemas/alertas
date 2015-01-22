@@ -52,7 +52,7 @@ class AlertaManager
         }
 
         foreach ($alertasAsignadas as $alerta) {
-            $alerta->setVisto(true);
+            $alerta->setVisto(new \DateTime());
             $this->em->persist($alerta);
         }
         $this->em->flush();
