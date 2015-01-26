@@ -13,6 +13,7 @@ class AlertaController implements ControllerProviderInterface
         $controllers = $app['controllers_factory'];
 
         $controllers->put('/alertas/{alerta}/visto/{username}', [$this, 'visto']);
+        $controllers->post('/alertas', [$this, 'nueva']);
         $controllers->get('/usuarios/{username}/alertas', [$this, 'alertas']);
 
         return $controllers;
@@ -24,6 +25,17 @@ class AlertaController implements ControllerProviderInterface
         $alertas = $manager->getByUsuario($username);
 
         return $app->json($manager->toArray($alertas));
+    }
+
+    public function nueva(Application $app, Request $request)
+    {
+        $manager = $app['alerta_manager'];
+        $mensaje = $request->get('mensaje');
+        $usuario = $request->get('usuario');
+
+        $alerta = $manager->crear($mensaje, $usuario);
+
+        return $app->json($alerta->toArray());
     }
 
     public function visto(Application $app, Request $request, $alerta, $username)

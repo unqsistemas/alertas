@@ -36,12 +36,15 @@ class AlertaManager
         $alerta = new Alerta();
         $alerta->setMensaje($mensaje);
 
-        $this->em->transactional(function ($em) use ($alerta, $usuario) {
+        return $this->em->transactional(function ($em) use ($alerta, $usuario) {
             $em->persist($alerta);
             $em->persist($usuario);
             $em->flush();
-            $em->persist(new AlertaAsignada($alerta, $usuario));
+            $asignada = new AlertaAsignada($alerta, $usuario);
+            $em->persist($asignada);
             $em->flush();
+
+            return $asignada;
         });
     }
 
