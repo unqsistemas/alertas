@@ -69,7 +69,7 @@ class AlertaManager
             $find['alerta'] = $alertaIds;
         }
 
-        return $this->em->getRepository('Entity\AlertaAsignada')->findBy($find);
+        return $this->em->getRepository('Entity\AlertaAsignada')->findBy($find, ['fecha' => 'DESC']);
     }
 
     public function toArray($alertasAsignadas)
