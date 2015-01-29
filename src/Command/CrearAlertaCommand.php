@@ -34,7 +34,7 @@ class CrearAlertaCommand extends Command
         $mensaje = $input->getArgument('mensaje');
         $username = $input->getArgument('usuario');
 
-        $this->alertaManager->crear($mensaje, $username);
+        $this->alertaManager->crear(['mensaje' => $mensaje, 'usuario' => $username]);
 
         $output->writeLn("Se creo la alerta '$mensaje' usuario '$username'");
     }

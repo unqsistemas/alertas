@@ -21,6 +21,11 @@ class Alerta
     protected $mensaje;
 
     /**
+     * @Column(type="text", nullable=true)
+     */
+    protected $link;
+
+    /**
      * Get id
      *
      * @return integer
@@ -51,6 +56,18 @@ class Alerta
     public function getMensaje()
     {
         return $this->mensaje;
+    }
+
+    public function setLink($link)
+    {
+        $this->link = $link;
+
+        return $this;
+    }
+
+    public function getLink()
+    {
+        return $this->link;
     }
 
     public function toArray()

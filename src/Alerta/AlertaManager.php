@@ -30,11 +30,12 @@ class AlertaManager
         return $usuario;
     }
 
-    public function crear($mensaje, $username)
+    public function crear($datos)
     {
-        $usuario = $this->getUsuario($username);
+        $usuario = $this->getUsuario($datos['usuario']);
         $alerta = new Alerta();
-        $alerta->setMensaje($mensaje);
+        $alerta->setMensaje($datos['mensaje']);
+        $alerta->setLink($datos['link']);
 
         return $this->em->transactional(function ($em) use ($alerta, $usuario) {
             $em->persist($alerta);

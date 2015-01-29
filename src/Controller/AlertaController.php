@@ -30,10 +30,12 @@ class AlertaController implements ControllerProviderInterface
     public function nueva(Application $app, Request $request)
     {
         $manager = $app['alerta_manager'];
-        $mensaje = $request->get('mensaje');
-        $usuario = $request->get('usuario');
+        $datos = array();
+        $datos['mensaje'] = $request->get('mensaje');
+        $datos['usuario'] = $request->get('usuario');
+        $datos['link'] = $request->get('link');
 
-        $alerta = $manager->crear($mensaje, $usuario);
+        $alerta = $manager->crear($datos);
 
         return $app->json($alerta->toArray());
     }
