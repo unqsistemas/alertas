@@ -16,12 +16,17 @@ class Alerta
     protected $id;
 
     /**
+     * @Column(type="string", nullable=true, unique=true)
+     */
+    protected $codigo;
+
+    /**
      * @Column(type="text")
      */
     protected $mensaje;
 
     /**
-     * @Column(type="text", nullable=true)
+     * @Column(type="string", nullable=true)
      */
     protected $link;
 
@@ -33,6 +38,18 @@ class Alerta
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 
     /**

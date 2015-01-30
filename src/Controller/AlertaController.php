@@ -34,6 +34,7 @@ class AlertaController implements ControllerProviderInterface
         $datos['mensaje'] = $request->get('mensaje');
         $datos['usuario'] = $request->get('usuario');
         $datos['link'] = $request->get('link');
+        $datos['codigo'] = $request->get('codigo');
 
         $alerta = $manager->crear($datos);
 

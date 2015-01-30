@@ -30,18 +30,45 @@ class AlertaManager
         return $usuario;
     }
 
+    protected function getAlerta($codigo)
+    {
+        $alerta = $this->em->getRepository('Entity\Alerta')->findOneByCodigo($codigo);
+
+        if (!$alerta) {
+            $alerta = new Alerta();
+            $alerta->setCodigo($codigo);
+        }
+
+        return $alerta;
+    }
+
+    protected function getAlertaAsignada($alerta, $usuario)
+    {
+        if ($alerta->getId() && $usuario->getId()) {
+            return $this->em->getRepository('Entity\AlertaAsignada')->find(array(
+                'alerta' => $alerta->getId(),
+                'usuario' => $usuario->getId()
+            ));
+        }
+
+        return null;
+    }
+
     public function crear($datos)
     {
         $usuario = $this->getUsuario($datos['usuario']);
-        $alerta = new Alerta();
+        $alerta = $this->getAlerta($datos['codigo']);
+        if (!$asignada = $this->getAlertaAsignada($alerta, $usuario)) {
+            $asignada = new AlertaAsignada($alerta, $usuario);
+        }
+
         $alerta->setMensaje($datos['mensaje']);
         $alerta->setLink($datos['link']);
 
-        return $this->em->transactional(function ($em) use ($alerta, $usuario) {
+        return $this->em->transactional(function ($em) use ($alerta, $usuario, $asignada) {
             $em->persist($alerta);
             $em->persist($usuario);
             $em->flush();
-            $asignada = new AlertaAsignada($alerta, $usuario);
             $em->persist($asignada);
             $em->flush();
 

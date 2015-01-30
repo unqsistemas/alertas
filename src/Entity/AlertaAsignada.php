@@ -137,6 +137,7 @@ class AlertaAsignada
             'id' => $this->alerta->getId(),
             'usuario' => $this->usuario->getUsername(),
             'mensaje' => $this->alerta->getMensaje(),
+            'codigo' => $this->alerta->getCodigo(),
             'link' => $this->alerta->getLink(),
             'visto' => $this->visto ? $this->visto->format("d-m-Y H:i:s") : $this->visto,
             'fecha' => $this->fecha->format("d-m-Y H:i:s")
