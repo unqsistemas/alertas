@@ -30,6 +30,18 @@ $app->register(new Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider, arra
 	)
 ));
 
+$app->register(new Silex\Provider\SecurityServiceProvider(), array(
+	'security.encoder.digest' => new Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder('sha512', false, 1),
+	'security.firewalls' => array(
+		'api' => array(
+			'pattern' => '^/',
+			'stateless' => true,
+			'http' => true,
+			'users' => $config['auth'],
+		)
+	)
+));
+
 $app['alerta_manager'] = function ($app) {
 	return new Alerta\AlertaManager($app);
 };
