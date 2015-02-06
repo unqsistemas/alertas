@@ -58,10 +58,11 @@ class AlertaManager
     {
         $usuario = $this->getUsuario($datos['usuario']);
         $alerta = $this->getAlerta($datos['codigo']);
-        if (!$asignada = $this->getAlertaAsignada($alerta, $usuario)) {
-            $asignada = new AlertaAsignada($alerta, $usuario);
+        if ($asignada = $this->getAlertaAsignada($alerta, $usuario)) {
+            return $asignada;
         }
 
+        $asignada = new AlertaAsignada($alerta, $usuario);
         $alerta->setMensaje($datos['mensaje']);
         $alerta->setLink($datos['link']);
 
